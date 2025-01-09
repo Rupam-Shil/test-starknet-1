@@ -18,7 +18,7 @@ function MyBalance() {
 	return (
 		<div className="bg-card rounded-2xl p-4 flex flex-col">
 			{!balanceIsLoading && !balanceIsError && userAddress && (
-				<div className="p-4 bg-white border-black border">
+				<div className="">
 					<h3 className="text-lg font-bold mb-2">Your Balance</h3>
 					<p>Symbol: {balanceData?.symbol}</p>
 					<p>Balance: {Number(balanceData?.formatted).toFixed(4)}</p>

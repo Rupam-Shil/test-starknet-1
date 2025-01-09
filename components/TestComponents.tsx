@@ -5,7 +5,7 @@ import MyBalance from './MyBalance';
 
 function TestComponents() {
 	return (
-		<div>
+		<div className="grid grid-cols-2 gap-4">
 			<BlockData />
 			<MyBalance />
 		</div>
