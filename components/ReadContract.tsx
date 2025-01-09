@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ABI } from '@/abis/abi';
 import { useContractRead } from '@starknet-react/core';
 import React from 'react';

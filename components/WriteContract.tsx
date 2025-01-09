@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ABI } from '@/abis/wallet-abi';
 import {
 	useAccount,
