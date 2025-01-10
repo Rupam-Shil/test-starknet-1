@@ -19,7 +19,11 @@ function WriteContract() {
 		try {
 			await writeAsync();
 		} catch (e) {
-			toast.error(e.message);
+			if (e instanceof Error) {
+				toast.error(e.message);
+			} else {
+				toast.error('An unknown error occurred');
+			}
 		}
 	};
 	const { address: userAddress } = useAccount();
