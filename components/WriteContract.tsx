@@ -7,28 +7,53 @@ import {
 	useWaitForTransaction,
 } from '@starknet-react/core';
 import React, { useMemo, useState, useTransition } from 'react';
+import { toast } from 'react-toastify';
 import { Abi } from 'starknet';
 
 function WriteContract() {
 	const contractAddress =
-		'0x00c1f43c48320b339994847e82dd8616a05d385b0a33a4eeadd1217e0728adc4';
+		'0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d';
 	const [amount, setAmount] = useState<number | ''>(0);
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		writeAsync();
+		try {
+			await writeAsync();
+		} catch (e) {
+			toast.error(e.message);
+		}
 	};
 	const { address: userAddress } = useAccount();
+
+	function convertStrkToWei(strkAmount: number) {
+		// STRK token has 18 decimals (like most ERC-20 tokens)
+		const decimals = 18;
+
+		// Split the amount into integer and fractional parts
+		const [integerPart, fractionalPart = ''] = strkAmount.toString().split('.');
+
+		// Add padding to the fractional part to match the decimal places
+		const paddedFractionalPart = fractionalPart
+			.padEnd(decimals, '0')
+			.slice(0, decimals);
+
+		// Concatenate the integer and fractional parts and convert to BigInt
+		const weiAmount = BigInt(integerPart + paddedFractionalPart);
+
+		return weiAmount;
+	}
 
 	const typedABI = ABI as Abi;
 	const { contract } = useContract({
 		abi: typedABI,
-		address: userAddress,
+
+		address: contractAddress,
 	});
 
 	const calls = useMemo(() => {
 		if (!userAddress || !contract) return [];
-		const safeAmount = amount || 0;
-		return [contract.populate('transfer', [contractAddress, safeAmount])];
+
+		const safeAmount = convertStrkToWei(amount as number);
+		return [contract.populate('approve', [userAddress, safeAmount])];
 	}, [contract, userAddress, amount]);
 
 	const {
@@ -50,8 +75,6 @@ function WriteContract() {
 		hash: writeData?.transaction_hash,
 		watch: true,
 	});
-
-	console.log({ writeError });
 
 	const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const value = event.target.value;
@@ -111,6 +134,7 @@ function WriteContract() {
 					type="number"
 					id="amount"
 					value={amount}
+					required
 					onChange={handleAmountChange}
 					className="block w-full px-3 py-2 text-sm leading-6 rounded-lg  focus:outline-none  black-border-p bg-transparent border border-gray-200"
 				/>

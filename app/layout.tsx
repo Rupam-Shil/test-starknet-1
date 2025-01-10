@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 import { StarknetProvider } from '@/context/StarknetProver';
+import { ToastContainer } from 'react-toastify';
 
 const geistSans = localFont({
 	src: './fonts/GeistVF.woff',
@@ -30,6 +31,7 @@ export default function RootLayout({
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
 				<StarknetProvider>{children}</StarknetProvider>
+				<ToastContainer position="bottom-center" autoClose={5000} />
 			</body>
 		</html>
 	);
