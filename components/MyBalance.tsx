@@ -1,8 +1,8 @@
 import { useAccount, useBalance } from '@starknet-react/core';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 function MyBalance() {
-	const { address: userAddress } = useAccount();
+	const { address: userAddress, account } = useAccount();
 
 	const {
 		isLoading: balanceIsLoading,
@@ -14,6 +14,12 @@ function MyBalance() {
 		watch: true,
 		token: '0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d',
 	});
+
+	useEffect(() => {
+		if (account) {
+			console.log('Account:', account);
+		}
+	}, [account]);
 
 	return (
 		<div className="bg-card rounded-2xl p-4 flex flex-col">
