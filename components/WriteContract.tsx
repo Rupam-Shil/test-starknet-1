@@ -3,8 +3,8 @@ import { ABI } from '@/abis/wallet-abi';
 import {
 	useAccount,
 	useContract,
-	useContractWrite,
-	useWaitForTransaction,
+	useSendTransaction,
+	useTransactionReceipt,
 } from '@starknet-react/core';
 import React, { useMemo, useState, useTransition } from 'react';
 import { toast } from 'react-toastify';
@@ -61,11 +61,11 @@ function WriteContract() {
 	}, [contract, userAddress, amount]);
 
 	const {
-		writeAsync,
+		send: writeAsync,
 		data: writeData,
 		isPending: writeIsPending,
 		error: writeError,
-	} = useContractWrite({
+	} = useSendTransaction({
 		calls,
 	});
 
@@ -75,7 +75,7 @@ function WriteContract() {
 		isLoading: waitIsLoading,
 		isError: waitIsError,
 		error: waitError,
-	} = useWaitForTransaction({
+	} = useTransactionReceipt({
 		hash: writeData?.transaction_hash,
 		watch: true,
 	});

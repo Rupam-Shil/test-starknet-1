@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ABI } from '@/abis/abi';
-import { useContractRead } from '@starknet-react/core';
+import { useReadContract } from '@starknet-react/core';
 import React from 'react';
 import { Abi } from 'starknet';
 
@@ -13,7 +13,7 @@ function ReadContract() {
 		isError: readIsError,
 		isLoading: readIsLoading,
 		error: readError,
-	} = useContractRead({
+	} = useReadContract({
 		functionName: 'total_supply',
 		args: [],
 		abi: ABI as Abi,
